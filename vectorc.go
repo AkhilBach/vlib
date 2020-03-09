@@ -97,14 +97,14 @@ func (l *Location3D) DistanceFrom(src Location3D) float64 {
 }
 
 func RelativeGeo(src, dest Location3D) (distance3d, thetaH, thetaV float64) {
-
 	thetaH = cmplx.Phase(dest.XY() - src.XY())
-
 	r := cmplx.Abs(dest.XY() - src.XY())
 	z := dest.Z - src.Z
 	thetaV = cmplx.Phase(complex(r, z))
-	// thetaV = math.Acos(z / r)
 	distance3d = dest.DistanceFrom(src)
+	if thetaH < 0 {
+		thetaH = 2*math.Pi + thetaH
+	}
 	return distance3d, ToDegree(thetaH), ToDegree(thetaV)
 }
 
